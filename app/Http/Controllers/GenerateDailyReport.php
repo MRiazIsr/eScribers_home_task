@@ -15,8 +15,9 @@ class GenerateDailyReport extends Command
 
         $orders = DB::table('orders')
             ->whereDate('created_at', $today)
+            ->and('status', 2) //2 = comleted payment
             ->join('users', 'users.id', '=', 'orders.user_id')
-            ->join('products', 'products.id', '=', 'order.product_id')
+            ->join('products', 'products.id', '=', 'product.product_id')
             ->select(
                 'orders.created_at as date',
                 'products.name as model',
