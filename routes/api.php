@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', 'AuthController@register');
+Route::post('login', 'AuthController@login');
+Route::middleware('auth:api')->post('logout', 'AuthController@logout');
+
+Route::group(['prefix' => 'products', 'middleware' => 'auth'], function () {
+    Route::get('/', 'ProductController@index');
+    Route::get('/{id}', 'ProductController@getById');
+    Route::patch('/{id}', 'ProductController@update');
+    Route::delete('/{id}', 'ProductController@destroy');
+});
+
+Route::group(['prefix' => 'orders', 'middleware' => 'auth'], function () {
+    Route::get('/', 'OrderController@index');
+    Route::get('/{id}', 'OrderController@getById');
+    Route::post('/{id}', 'OrderController@create');
+    Route::patch('/{id}', 'OrderController@update');
 });
